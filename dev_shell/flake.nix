@@ -12,7 +12,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Import the dev-packages.nix file to get extra packages and shell hooks
-        # extra = import ./dev-packages.nix { inherit pkgs; };
+         extra = import ./dev-packages.nix { inherit pkgs; };
       in
       {
         devShells.default = pkgs.mkShell {
