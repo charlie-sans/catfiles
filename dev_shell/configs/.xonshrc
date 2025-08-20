@@ -1,0 +1,65 @@
+
+import datetime
+
+print("🚀 Meow Meow!")
+
+# --- Auto-load .xsh files from config directory ---
+XONSH_CONFIG_DIR = f"configs"
+
+def _load_xsh_files(directory, pattern="*.xsh"):
+    """Automatically load all .xsh files from a directory"""
+    from pathlib import Path
+    import glob
+    
+    config_dir = Path(directory)
+    if not config_dir.exists():
+        print(f"Config directory {directory} does not exist")
+        return
+    
+    # Load files in specific order for proper dependency handling
+    load_order = [
+        "env.xsh",      # Environment variables first
+        "functions.xsh", # Then functions
+        "aliases.xsh",  # Then aliases
+        "*.xsh"         # Then everything else
+    ]
+    
+    loaded_files = set()
+    
+    for pattern in load_order:
+        for file_path in config_dir.glob(pattern):
+            if file_path.name not in loaded_files and file_path.is_file():
+                try:
+                    source @(str(file_path))
+                    loaded_files.add(file_path.name)
+                    print(f"✓ Loaded: {file_path.name}")
+                except Exception as e:
+                    print(f"✗ Failed to load {file_path.name}: {e}")
+
+# Load all .xsh files from config directory
+_load_xsh_files(XONSH_CONFIG_DIR)
+
+# --- Load project-specific configs if they exist ---
+XONSH_PROJECT_DIR = f"projects"
+
+def _load_project_configs():
+    """Load project-specific configurations"""
+    from pathlib import Path
+    project_dir = Path(XONSH_PROJECT_DIR)
+    
+    if project_dir.exists() and project_dir.is_dir():
+        for project_file in project_dir.glob("*.xsh"):
+            try:
+                source @(str(project_file))
+                print(f"✓ Loaded project: {project_file.stem}")
+            except Exception as e:
+                print(f"✗ Failed to load project {project_file.stem}: {e}")
+
+_load_project_configs()
+
+
+
+# --- Prompt Customization ---
+PROMPT = '{env_name}{BOLD_GREEN}{user}@{hostname}{BOLD_BLUE} {cwd}{NO_COLOR} {branch_color}{curr_branch}{NO_COLOR} {BOLD_BLUE}:3{NO_COLOR} '
+
+print("✅ All configurations loaded successfully!")
