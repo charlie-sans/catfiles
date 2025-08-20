@@ -38,7 +38,7 @@
 
             # Xonsh shell
             xonsh
-           ]; ++ (extra.extraPackages or []);
+           ] ++ (extra.extraPackages or []);
 
           # Environment variables
           env = {
