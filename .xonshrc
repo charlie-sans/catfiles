@@ -1,0 +1,8 @@
+# XONSH WEBCONFIG START
+$XONSH_COLOR_STYLE = 'dracula'
+$PROMPT = '[{localtime}] {YELLOW}{env_name} {BOLD_BLUE}{user}@{hostname} {BOLD_GREEN}{cwd} {gitstatus}{RESET}\n:3 '
+xontrib load coreutils
+# XONSH WEBCONFIG END
+#execx($(/usr/bin/starship init xonsh --print-full-init))
+aliases["fetch"] = "hyfetch --ascii-file ~/.config/fastfetch/logo.txt"
+aliases["git-ovh"] = "git clone https://git.finite.ovh"
